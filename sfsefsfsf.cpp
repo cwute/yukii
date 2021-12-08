@@ -5,14 +5,15 @@
 #include <chrono>
 #include <cmath>
 #include <Lmcons.h>
+#include <ctime>
+#pragma warning(disable : 4996)
+
 
 
 using namespace std;
 float sens = 0.6f;
 int fov;
 boolean randomize = true;
-
-float ArRpmMilis = 1000.0f / (450 / 60.0f);
 
 void QuerySleep(int ms)
 {
@@ -38,7 +39,7 @@ void Mouse_Move(Vector2 vals)
 }
 
 
-void Smoothing(float delay, float animation, Vector2 in,bool holo,bool scope8x) {
+void Smoothing(float delay, float animation, Vector2 in,bool holo,bool scope8x,bool suppresor) {
     int x_ = 0, y_ = 0, t_ = 0;
     int xmult, ymult;
     if (holo) {
@@ -49,7 +50,15 @@ void Smoothing(float delay, float animation, Vector2 in,bool holo,bool scope8x) 
         xmult = (int)(in.x * 3.84 / 4) / sens / 1;
         ymult = (int)(in.y * 3.84 / 4) / sens / 1;
     }
-    if(!holo && !scope8x) {
+
+    //tbd 0.8 for suppresor
+    else if (suppresor) {
+
+        xmult = (int)(in.x * 3.84 / 4) / sens / 1;
+        ymult = (int)(in.y * 3.84 / 4) / sens / 1;
+
+    }
+    if(!holo && !scope8x && !suppresor) {
         xmult = (int)(in.x / 4) / sens / 1;
         ymult = (int)(in.y / 4) / sens / 1;
     }
@@ -91,10 +100,15 @@ void printStart() {
 
     //cba fucking around with getting username shits too hard in c++ so im using some random memory adress
     string idk = "negr";
-    std::cout << "Welcome: " << &idk;
+    std::cout << "Welcome: " << &idk << endl;
+
+    time_t now = time(0);
+    char* dt = ctime(&now);
+    cout << "Time of login: " << dt << endl;
+
 }
 
-void print(boolean holo, boolean scope8x,int choice) {
+void print(boolean holo, boolean scope8x,int choice, bool suppresor) {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hConsole, 13);
 
@@ -153,12 +167,12 @@ void print(boolean holo, boolean scope8x,int choice) {
 
     SetConsoleTextAttribute(hConsole, 11);
     std::cout << endl;
-    std::cout << "Scope: " << "                          ";
+    std::cout << "Attachments: " << "                    ";
     if (holo) {
         SetConsoleTextAttribute(hConsole, 10);
         std::cout << "holo, ";
         SetConsoleTextAttribute(hConsole, 12);
-        std::cout << "8x, none" << endl;
+        std::cout << "8x, none, suppresor" << endl;
     }
     else if (scope8x) {
         SetConsoleTextAttribute(hConsole, 12);
@@ -166,13 +180,26 @@ void print(boolean holo, boolean scope8x,int choice) {
         SetConsoleTextAttribute(hConsole, 10);
         std::cout << "8x, ";
         SetConsoleTextAttribute(hConsole, 12);
-        std::cout << "none" << endl;
+        std::cout << "none, suppresor" << endl;
+    }
+    else if (suppresor) {
+        SetConsoleTextAttribute(hConsole, 12);
+        std::cout << "holo, ";
+        SetConsoleTextAttribute(hConsole, 12);
+        std::cout << "8x, ";
+        SetConsoleTextAttribute(hConsole, 12);
+        std::cout << "none, ";
+        SetConsoleTextAttribute(hConsole, 10);
+        std::cout << "suppresor " << endl;
     }
     else {
         SetConsoleTextAttribute(hConsole, 12);
         std::cout << "holo, 8x, ";
         SetConsoleTextAttribute(hConsole, 10);
-        std::cout << "none" << endl;
+        std::cout << "none, ";
+        SetConsoleTextAttribute(hConsole, 12);
+        std::cout << "suppresor";
+
     }
     
 }
@@ -185,6 +212,7 @@ int main()
     int choice = 0;
     boolean holo = false;
     boolean scope8x = false;
+    boolean suppresor = false;
 
     while (true) {
         
@@ -194,14 +222,14 @@ int main()
                 choice = 0;
                 Beep(1000, 100);
                 system("CLS");
-                print(holo, scope8x, choice);
+                print(holo, scope8x, choice, suppresor);
                 Sleep(500);
             }
             else {
                 choice = 1;
                 Beep(800, 100);
                 system("CLS");
-                print(holo, scope8x, choice);
+                print(holo, scope8x, choice, suppresor);
                 Sleep(500);
 
             }
@@ -212,14 +240,14 @@ int main()
                 choice = 0;
                 Beep(1000, 100);
                 system("CLS");
-                print(holo, scope8x, choice);
+                print(holo, scope8x, choice, suppresor);
                 Sleep(500);
             }
-            else if(choice == 1 || choice == 0) {
+            else if(choice == 1 || choice == 0 || choice == 4|| choice == 3) {
                 choice = 2;
                 Beep(800, 100);
                 system("CLS");
-                print(holo, scope8x, choice);
+                print(holo, scope8x, choice, suppresor);
                 Sleep(500);
 
             }
@@ -230,14 +258,14 @@ int main()
                 choice = 0;
                 Beep(1000, 100);
                 system("CLS");
-                print(holo, scope8x, choice);
+                print(holo, scope8x, choice, suppresor);
                 Sleep(500);
             }
-            else if (choice == 1 || choice == 0|| choice == 2) {
+            else if (choice == 1 || choice == 0|| choice == 2 || choice == 4) {
                 choice = 3;
                 Beep(800, 100);
                 system("CLS");
-                print(holo, scope8x, choice);
+                print(holo, scope8x, choice, suppresor);
                 Sleep(500);
 
             }
@@ -248,18 +276,38 @@ int main()
                 choice = 0;
                 Beep(1000, 100);
                 system("CLS");
-                print(holo, scope8x, choice);
+                print(holo, scope8x, choice, suppresor);
                 Sleep(500);
             }
             else if (choice == 1 || choice == 0 || choice == 2 || choice == 3) {
                 choice = 4;
                 Beep(800, 100);
                 system("CLS");
-                print(holo, scope8x, choice);
+                print(holo, scope8x, choice, suppresor);
                 Sleep(500);
 
             }
 
+        }
+        if (GetAsyncKeyState(VK_F7) & 0x8000) {
+            if (suppresor) {
+                Beep(1000, 100);
+                holo = false;
+                scope8x = false;
+                suppresor = false;
+                system("CLS");
+                print(holo,scope8x,choice,suppresor);
+                Sleep(500);
+            }
+            else {
+                suppresor = true;
+                holo = false;
+                scope8x = false;
+                Beep(800, 100);
+                system("CLS");
+                print(holo, scope8x, choice, suppresor);
+                Sleep(500);
+            }
         }
 
         
@@ -269,7 +317,7 @@ int main()
                 holo = false;
                 scope8x = false;
                 system("CLS");
-                print(holo, scope8x, choice);
+                print(holo, scope8x, choice, suppresor);
                 Sleep(500);
             }
             else{
@@ -277,7 +325,7 @@ int main()
                 scope8x = false;
                 Beep(800, 100);
                 system("CLS");
-                print(holo, scope8x, choice);
+                print(holo, scope8x, choice, suppresor);
                 Sleep(500);
             }
 
@@ -288,7 +336,7 @@ int main()
                 scope8x = false;
                 holo = false;
                 system("CLS");
-                print(holo, scope8x, choice);
+                print(holo, scope8x, choice, suppresor);
                 Sleep(500);
             }
             else {
@@ -296,14 +344,13 @@ int main()
                 holo = false;
                 Beep(800, 100);
                 system("CLS");
-                print(holo, scope8x, choice);
+                print(holo, scope8x, choice, suppresor);
                 Sleep(500);
             }
 
         }
         
         if (GetAsyncKeyState(VK_F12) & 0x8000) exit(0);
-
 
         switch (choice) {
         case 0:
@@ -313,7 +360,7 @@ int main()
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
 
                 if (magsize < 31) {
-                    Smoothing(133.f, AssaultRifleControl::control_ak[magsize], AssaultRifle::data[magsize],holo,scope8x);
+                    Smoothing(133.f, AssaultRifleControl::control_ak[magsize], AssaultRifle::data[magsize],holo,scope8x,suppresor);
                     magsize++;
                 }
             }
@@ -322,7 +369,7 @@ int main()
             //mp5
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
                 if (magsize < 31) {
-                    Smoothing(100.f, MP5Control::control_mp5[magsize], MP5::data[magsize], holo,scope8x);
+                    Smoothing(100.f, MP5Control::control_mp5[magsize], MP5::data[magsize], holo,scope8x,suppresor);
                     magsize++;
                 }
             }
@@ -331,7 +378,7 @@ int main()
             //m249
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
                 if (magsize < 100) {
-                    Smoothing(110.f, 110.f, M249::data[magsize], holo,scope8x);
+                    Smoothing(110.f, 110.f, M249::data[magsize], holo,scope8x,suppresor);
                     magsize++;
                 }
             }
@@ -340,7 +387,7 @@ int main()
             //semi
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
                 if (magsize < 100) {
-                    Smoothing(103.f, 103.f, semi::data[0], holo, scope8x);
+                    Smoothing(103.f, 103.f, semi::data[0], holo, scope8x,suppresor);
                     magsize++;
                 }
             }

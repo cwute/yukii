@@ -32,5 +32,9 @@ using namespace Math;
 		//103.f
 		Vector2 data[] = { {0,75} };
 	}
+	namespace M39 {
+		//205.f
+		Vector2 data[] = { {0,68} };
+	}
 
 	

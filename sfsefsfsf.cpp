@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include <chrono>
 #include <cmath>
+#include <Lmcons.h>
 
 
 using namespace std;
@@ -53,12 +54,12 @@ void Smoothing(float delay, float animation, Vector2 in,bool holo,bool scope8x) 
         ymult = (int)(in.y / 4) / sens / 1;
     }
     
-    /*
+    
     if (randomize) {
-        xmult = xmult + rand() % 1;
-        ymult = ymult + rand() % 1;
+        xmult = xmult + rand() % 2 / 4;
+        ymult = ymult + rand() % 2 / 4;
     }
-    */
+    
 
     for (int i = 1; i <= (int)animation; ++i) {
         int xI = i * xmult / (int)animation;
@@ -69,6 +70,28 @@ void Smoothing(float delay, float animation, Vector2 in,bool holo,bool scope8x) 
         x_ = xI; y_ = yI; t_ = tI;
     }
     QuerySleep((int)delay - (int)animation);
+}
+
+void printStart() {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, 13);
+
+
+    std::cout << R"(  ___    ___ ___  ___  ___  __    ___  ___     
+ |\  \  /  /|\  \|\  \|\  \|\  \ |\  \|\  \    
+ \ \  \/  / | \  \\\  \ \  \/  /|\ \  \ \  \   
+  \ \    / / \ \  \\\  \ \   ___  \ \  \ \  \  
+   \/  /  /   \ \  \\\  \ \  \\ \  \ \  \ \  \ 
+ __/  / /      \ \_______\ \__\\ \__\ \__\ \__\
+|\___/ /        \|_______|\|__| \|__|\|__|\|__|
+\|___|/                                        
+                                               
+                                               )" << '\n';
+   
+
+    //cba fucking around with getting username shits too hard in c++ so im using some random memory adress
+    string idk = "negr";
+    std::cout << "Welcome: " << &idk;
 }
 
 void print(boolean holo, boolean scope8x,int choice) {
@@ -88,12 +111,48 @@ void print(boolean holo, boolean scope8x,int choice) {
                                                )" << '\n';
     SetConsoleTextAttribute(hConsole, 11);
     std::cout << "Weapon: " << "                         ";
-    
-    
-    
-    
-    
+    switch (choice) {
+
+         case 0:
+             SetConsoleTextAttribute(hConsole, 12);
+             std::cout << "ak, mp5, m249, semi" << endl;
+              break;
+
+         case 1:
+             SetConsoleTextAttribute(hConsole, 10);
+             std::cout << "ak, ";
+             SetConsoleTextAttribute(hConsole, 12);
+             std::cout << "mp5, m249, semi" << endl;
+              break;
+
+         case 2:
+             SetConsoleTextAttribute(hConsole, 12);
+             std::cout << "ak, ";
+             SetConsoleTextAttribute(hConsole, 10);
+             std::cout << "mp5, ";
+             SetConsoleTextAttribute(hConsole, 12);
+             std::cout << "m249, semi" << endl;
+              break;
+
+         case 3:
+             SetConsoleTextAttribute(hConsole, 12);
+             std::cout << "ak, mp5, ";
+             SetConsoleTextAttribute(hConsole, 10);
+             std::cout << "m249, ";
+             SetConsoleTextAttribute(hConsole, 12);
+             std::cout << "semi" << endl;
+              break;
+
+         case 4:
+             SetConsoleTextAttribute(hConsole, 12);
+             std::cout << "ak, mp5, m249, ";
+             SetConsoleTextAttribute(hConsole, 10);
+             std::cout << "semi" << endl;
+              break;
+    }
+
     SetConsoleTextAttribute(hConsole, 11);
+    std::cout << endl;
     std::cout << "Scope: " << "                          ";
     if (holo) {
         SetConsoleTextAttribute(hConsole, 10);
@@ -116,39 +175,33 @@ void print(boolean holo, boolean scope8x,int choice) {
         std::cout << "none" << endl;
     }
     
-
-
-
-
-
 }
 
 int main()
 {
-    
-
-    
-    
     SetConsoleTitle(L"Yukii");
+    printStart();
 
     int choice = 0;
     boolean holo = false;
     boolean scope8x = false;
-    print(holo,scope8x,choice);
 
     while (true) {
+        
         int magsize = 0;
         if (GetAsyncKeyState(VK_END) & 0x8000) {
             if (choice == 1) {
                 choice = 0;
                 Beep(1000, 100);
-                std::cout << " Ar deactivated" << endl;
+                system("CLS");
+                print(holo, scope8x, choice);
                 Sleep(500);
             }
             else {
                 choice = 1;
-                std::cout << " Ar activated" << endl;
                 Beep(800, 100);
+                system("CLS");
+                print(holo, scope8x, choice);
                 Sleep(500);
 
             }
@@ -158,13 +211,15 @@ int main()
             if (choice == 2) {
                 choice = 0;
                 Beep(1000, 100);
-                std::cout << " mp5 deactivated" << endl;
+                system("CLS");
+                print(holo, scope8x, choice);
                 Sleep(500);
             }
             else if(choice == 1 || choice == 0) {
                 choice = 2;
-                std::cout << " mp5 activated" << endl;
                 Beep(800, 100);
+                system("CLS");
+                print(holo, scope8x, choice);
                 Sleep(500);
 
             }
@@ -174,13 +229,15 @@ int main()
             if (choice == 3) {
                 choice = 0;
                 Beep(1000, 100);
-                std::cout << " m249 deactivated" << endl;
+                system("CLS");
+                print(holo, scope8x, choice);
                 Sleep(500);
             }
             else if (choice == 1 || choice == 0|| choice == 2) {
                 choice = 3;
-                std::cout << " m249 activated" << endl;
                 Beep(800, 100);
+                system("CLS");
+                print(holo, scope8x, choice);
                 Sleep(500);
 
             }
@@ -190,13 +247,15 @@ int main()
             if (choice == 4) {
                 choice = 0;
                 Beep(1000, 100);
-                std::cout << " semi deactivated" << endl;
+                system("CLS");
+                print(holo, scope8x, choice);
                 Sleep(500);
             }
             else if (choice == 1 || choice == 0 || choice == 2 || choice == 3) {
                 choice = 4;
-                std::cout << " semi activated" << endl;
                 Beep(800, 100);
+                system("CLS");
+                print(holo, scope8x, choice);
                 Sleep(500);
 
             }
@@ -209,14 +268,16 @@ int main()
                 Beep(1000, 100);
                 holo = false;
                 scope8x = false;
-                std::cout << " holo deactivated" << endl;
+                system("CLS");
+                print(holo, scope8x, choice);
                 Sleep(500);
             }
             else{
                 holo = true;
                 scope8x = false;
-                std::cout << " holo activated" << endl;
                 Beep(800, 100);
+                system("CLS");
+                print(holo, scope8x, choice);
                 Sleep(500);
             }
 
@@ -226,14 +287,16 @@ int main()
                 Beep(1000, 100);
                 scope8x = false;
                 holo = false;
-                std::cout << " 8x deactivated" << endl;
+                system("CLS");
+                print(holo, scope8x, choice);
                 Sleep(500);
             }
             else {
                 scope8x = true;
                 holo = false;
-                std::cout << " 8x activated" << endl;
                 Beep(800, 100);
+                system("CLS");
+                print(holo, scope8x, choice);
                 Sleep(500);
             }
 
@@ -274,6 +337,7 @@ int main()
             }
             break;
         case 4:
+            //semi
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
                 if (magsize < 100) {
                     Smoothing(103.f, 103.f, semi::data[0], holo, scope8x);

@@ -14,9 +14,7 @@
 
 using namespace std;
 float sens = 0.6f;
-int fov;
 boolean randomize = true;
-
 void QuerySleep(int ms)
 {
     LONGLONG timerResolution;
@@ -39,7 +37,6 @@ void Mouse_Move(Vector2 vals)
     // c-style casts lolol
     mouse_event(MOUSEEVENTF_MOVE, (int)vals.x, (int)vals.y, 0, 0);
 }
-
 
 void Smoothing(float delay, float animation, Vector2 in,bool holo,bool scope8x,bool suppresor) {
     int x_ = 0, y_ = 0, t_ = 0;
@@ -100,9 +97,10 @@ void printStart() {
                                                )" << '\n';
    
 
-    //cba fucking around with getting username shits too hard in c++ so im using some random memory adress
-    string idk = "negr";
-    std::cout << "Welcome: " << &idk << endl;
+    char* user = getenv("username");
+    std::cout << "Welcome: " << string(user) << " uwu <3 >.<" <<endl;
+   
+    
 
     time_t now = time(0);
     char* dt = ctime(&now);
@@ -130,15 +128,17 @@ void print(boolean holo, boolean scope8x,int choice, bool suppresor) {
     switch (choice) {
 
          case 0:
+             SetConsoleTextAttribute(hConsole, 10);
+             std::cout << "none, ";
              SetConsoleTextAttribute(hConsole, 12);
-             std::cout << "ak, mp5, m249, semi" << endl;
+             std::cout << "ak, mp5, m249, semi, m39" << endl;
               break;
 
          case 1:
              SetConsoleTextAttribute(hConsole, 10);
              std::cout << "ak, ";
              SetConsoleTextAttribute(hConsole, 12);
-             std::cout << "mp5, m249, semi" << endl;
+             std::cout << "mp5, m249, semi, m39" << endl;
               break;
 
          case 2:
@@ -147,7 +147,7 @@ void print(boolean holo, boolean scope8x,int choice, bool suppresor) {
              SetConsoleTextAttribute(hConsole, 10);
              std::cout << "mp5, ";
              SetConsoleTextAttribute(hConsole, 12);
-             std::cout << "m249, semi" << endl;
+             std::cout << "m249, semi, m39" << endl;
               break;
 
          case 3:
@@ -156,15 +156,23 @@ void print(boolean holo, boolean scope8x,int choice, bool suppresor) {
              SetConsoleTextAttribute(hConsole, 10);
              std::cout << "m249, ";
              SetConsoleTextAttribute(hConsole, 12);
-             std::cout << "semi" << endl;
+             std::cout << "semi, m39" << endl;
               break;
 
          case 4:
              SetConsoleTextAttribute(hConsole, 12);
              std::cout << "ak, mp5, m249, ";
              SetConsoleTextAttribute(hConsole, 10);
-             std::cout << "semi" << endl;
+             std::cout << "semi, ";
+             SetConsoleTextAttribute(hConsole, 12);
+             std::cout << "m39" << endl;
               break;
+         case 5:
+             SetConsoleTextAttribute(hConsole, 12);
+             std::cout << "ak, mp5, m249, semi, ";
+             SetConsoleTextAttribute(hConsole, 10);
+             std::cout << "m39" << endl;
+             break;
     }
 
     SetConsoleTextAttribute(hConsole, 11);
@@ -204,44 +212,6 @@ void print(boolean holo, boolean scope8x,int choice, bool suppresor) {
         SetConsoleTextAttribute(hConsole, 12);
         std::cout << "suppresor " << endl;
     }
-
-    /*
-    * shitty ass code i hope ill never see this retarded shit ever again
-    if (holo) {
-        SetConsoleTextAttribute(hConsole, 10);
-        std::cout << "holo, ";
-        SetConsoleTextAttribute(hConsole, 12);
-        std::cout << "8x, none, suppresor" << endl;
-    }
-    else if (scope8x) {
-        SetConsoleTextAttribute(hConsole, 12);
-        std::cout << "holo, ";
-        SetConsoleTextAttribute(hConsole, 10);
-        std::cout << "8x, ";
-        SetConsoleTextAttribute(hConsole, 12);
-        std::cout << "none, suppresor" << endl;
-    }
-    else if (suppresor) {
-        SetConsoleTextAttribute(hConsole, 12);
-        std::cout << "holo, ";
-        SetConsoleTextAttribute(hConsole, 12);
-        std::cout << "8x, ";
-        SetConsoleTextAttribute(hConsole, 12);
-        std::cout << "none, ";
-        SetConsoleTextAttribute(hConsole, 10);
-        std::cout << "suppresor " << endl;
-    }
-    else {
-        SetConsoleTextAttribute(hConsole, 12);
-        std::cout << "holo, 8x, ";
-        SetConsoleTextAttribute(hConsole, 10);
-        std::cout << "none, ";
-        SetConsoleTextAttribute(hConsole, 12);
-        std::cout << "suppresor";
-
-    }
-    */
-    
 }
 
 int main()
@@ -271,9 +241,7 @@ int main()
                 system("CLS");
                 print(holo, scope8x, choice, suppresor);
                 Sleep(500);
-
             }
-
         }
         if (GetAsyncKeyState(VK_PRIOR) & 0x8000) {
             if (choice == 2) {
@@ -283,15 +251,13 @@ int main()
                 print(holo, scope8x, choice, suppresor);
                 Sleep(500);
             }
-            else if(choice == 1 || choice == 0 || choice == 4|| choice == 3) {
+            else{
                 choice = 2;
                 Beep(800, 100);
                 system("CLS");
                 print(holo, scope8x, choice, suppresor);
                 Sleep(500);
-
             }
-
         }
         if (GetAsyncKeyState(VK_NEXT) & 0x8000) {
             if (choice == 3) {
@@ -301,15 +267,13 @@ int main()
                 print(holo, scope8x, choice, suppresor);
                 Sleep(500);
             }
-            else if (choice == 1 || choice == 0|| choice == 2 || choice == 4) {
+            else {
                 choice = 3;
                 Beep(800, 100);
                 system("CLS");
                 print(holo, scope8x, choice, suppresor);
                 Sleep(500);
-
             }
-
         }
         if (GetAsyncKeyState(VK_HOME) & 0x8000) {
             if (choice == 4) {
@@ -319,7 +283,7 @@ int main()
                 print(holo, scope8x, choice, suppresor);
                 Sleep(500);
             }
-            else if (choice == 1 || choice == 0 || choice == 2 || choice == 3) {
+            else{
                 choice = 4;
                 Beep(800, 100);
                 system("CLS");
@@ -327,7 +291,24 @@ int main()
                 Sleep(500);
 
             }
+        }
+        if (GetAsyncKeyState(VK_INSERT) & 0x8000) {
 
+            if (choice == 5) {
+                choice = 0;
+                Beep(1000, 100);
+                system("CLS");
+                print(holo, scope8x, choice, suppresor);
+                Sleep(500);
+            }
+            else {
+                choice = 5;
+                Beep(800, 100);
+                system("CLS");
+                print(holo, scope8x, choice, suppresor);
+                Sleep(500);
+
+            }
         }
         if (GetAsyncKeyState(VK_F7) & 0x8000) {
             if (suppresor) {
@@ -345,8 +326,6 @@ int main()
                 Sleep(500);
             }
         }
-
-        
         if (GetAsyncKeyState(VK_F9) & 0x8000) {
             if (holo) {
                 Beep(1000, 100);

@@ -6,6 +6,8 @@
 #include <cmath>
 #include <Lmcons.h>
 #include <ctime>
+
+//line 107 fix
 #pragma warning(disable : 4996)
 
 
@@ -42,34 +44,34 @@ void Mouse_Move(Vector2 vals)
 void Smoothing(float delay, float animation, Vector2 in,bool holo,bool scope8x,bool suppresor) {
     int x_ = 0, y_ = 0, t_ = 0;
     int xmult, ymult;
-    if (holo) {
+    if (holo && !suppresor) {
          xmult = (int)(in.x * 1.2 / 4) / sens / 1;
          ymult = (int)(in.y  * 1.2/ 4) / sens / 1;
     }
-    else if (scope8x) {
+    else if (scope8x && !suppresor) {
         xmult = (int)(in.x * 3.84 / 4) / sens / 1;
         ymult = (int)(in.y * 3.84 / 4) / sens / 1;
     }
-
-    //tbd 0.8 for suppresor
-    else if (suppresor) {
-
-        xmult = (int)(in.x * 3.84 / 4) / sens / 1;
-        ymult = (int)(in.y * 3.84 / 4) / sens / 1;
-
+    else if (suppresor && !holo && !scope8x) {
+        xmult = (int)(in.x * 0.8 / 4) / sens / 1;
+        ymult = (int)(in.y * 0.8 / 4) / sens / 1;
     }
-    if(!holo && !scope8x && !suppresor) {
+    else if (suppresor && holo) {
+        xmult = (int)(in.x * 1.2 * 0.8 / 4) / sens / 1;
+        ymult = (int)(in.y * 1.2 * 0.8 / 4) / sens / 1;
+    }
+    else if (suppresor && scope8x) {
+        xmult = (int)(in.x * 3.84 * 0.8 / 4) / sens / 1;
+        ymult = (int)(in.y * 3.84 * 0.8 / 4) / sens / 1;
+    }
+    else if(!holo && !scope8x && !suppresor) {
         xmult = (int)(in.x / 4) / sens / 1;
         ymult = (int)(in.y / 4) / sens / 1;
     }
-    
-    
     if (randomize) {
-        xmult = xmult + rand() % 2 / 4;
-        ymult = ymult + rand() % 2 / 4;
+        xmult = xmult + rand() % 2 / 2;
+        ymult = ymult + rand() % 2 / 2;
     }
-    
-
     for (int i = 1; i <= (int)animation; ++i) {
         int xI = i * xmult / (int)animation;
         int yI = i * ymult / (int)animation;
@@ -168,6 +170,43 @@ void print(boolean holo, boolean scope8x,int choice, bool suppresor) {
     SetConsoleTextAttribute(hConsole, 11);
     std::cout << endl;
     std::cout << "Attachments: " << "                    ";
+    
+
+    if (!holo && !suppresor && !scope8x) {
+        SetConsoleTextAttribute(hConsole, 10);
+        std::cout << "none, ";
+    }
+    if (holo || suppresor || scope8x) {
+        SetConsoleTextAttribute(hConsole, 12);
+        std::cout << "none, ";
+    }
+    if (holo) {
+        SetConsoleTextAttribute(hConsole, 10);
+        std::cout << "holo, ";
+    }
+    else if (!holo) {
+        SetConsoleTextAttribute(hConsole, 12);
+        std::cout << "holo, ";
+    }
+    if (scope8x) {
+        SetConsoleTextAttribute(hConsole, 10);
+        std::cout << "8x, ";
+    }
+    else if (!scope8x) {
+        SetConsoleTextAttribute(hConsole, 12);
+        std::cout << "8x, ";
+    }
+    if (suppresor) {
+        SetConsoleTextAttribute(hConsole, 10);
+        std::cout << "suppresor " << endl;
+    }
+    else if (!suppresor) {
+        SetConsoleTextAttribute(hConsole, 12);
+        std::cout << "suppresor " << endl;
+    }
+
+    /*
+    * shitty ass code i hope ill never see this retarded shit ever again
     if (holo) {
         SetConsoleTextAttribute(hConsole, 10);
         std::cout << "holo, ";
@@ -201,6 +240,7 @@ void print(boolean holo, boolean scope8x,int choice, bool suppresor) {
         std::cout << "suppresor";
 
     }
+    */
     
 }
 
@@ -292,8 +332,6 @@ int main()
         if (GetAsyncKeyState(VK_F7) & 0x8000) {
             if (suppresor) {
                 Beep(1000, 100);
-                holo = false;
-                scope8x = false;
                 suppresor = false;
                 system("CLS");
                 print(holo,scope8x,choice,suppresor);
@@ -301,8 +339,6 @@ int main()
             }
             else {
                 suppresor = true;
-                holo = false;
-                scope8x = false;
                 Beep(800, 100);
                 system("CLS");
                 print(holo, scope8x, choice, suppresor);
@@ -328,7 +364,6 @@ int main()
                 print(holo, scope8x, choice, suppresor);
                 Sleep(500);
             }
-
         }
         if (GetAsyncKeyState(VK_F10) & 0x8000) {
             if (scope8x) {
@@ -347,9 +382,7 @@ int main()
                 print(holo, scope8x, choice, suppresor);
                 Sleep(500);
             }
-
         }
-        
         if (GetAsyncKeyState(VK_F12) & 0x8000) exit(0);
 
         switch (choice) {
@@ -388,6 +421,15 @@ int main()
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
                 if (magsize < 100) {
                     Smoothing(103.f, 103.f, semi::data[0], holo, scope8x,suppresor);
+                    magsize++;
+                }
+            }
+            break;
+        case 5:
+            //m39
+            while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
+                if (magsize < 100) {
+                    Smoothing(205.f, 205.f, M39::data[0], holo, scope8x, suppresor);
                     magsize++;
                 }
             }

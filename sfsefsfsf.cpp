@@ -10,9 +10,12 @@
 //line 107 fix
 #pragma warning(disable : 4996)
 
+//playsound fix
+#pragma comment(lib, "Winmm.lib")
 
 
-using namespace std;
+
+//using namespace std;
 float sens = 0.6f;
 boolean randomize = true;
 void QuerySleep(int ms)
@@ -83,6 +86,7 @@ void Smoothing(float delay, float animation, Vector2 in,bool holo,bool scope8x,b
 void printStart() {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hConsole, 13);
+    PlaySound(TEXT("D:\\stuff_for_c++_ playing_sounds_etc\\blackclover.wav"), NULL, SND_ASYNC);
 
 
     std::cout << R"(  ___    ___ ___  ___  ___  __    ___  ___     
@@ -98,13 +102,15 @@ void printStart() {
    
 
     char* user = getenv("username");
-    std::cout << "Welcome: " << string(user) << " uwu <3 >.<" <<endl;
+    std::cout << "Welcome: " << std::string(user) << " uwu " <<std::endl;
    
     
 
     time_t now = time(0);
     char* dt = ctime(&now);
-    cout << "Time of login: " << dt << endl;
+    std::cout << "Time of login: " << dt << std::endl;
+    std::cout << std::endl;
+    std::cout << "Currently playing: Black Catcher by Viceblanka" << std::endl;
 
 }
 
@@ -131,14 +137,14 @@ void print(boolean holo, boolean scope8x,int choice, bool suppresor) {
              SetConsoleTextAttribute(hConsole, 10);
              std::cout << "none, ";
              SetConsoleTextAttribute(hConsole, 12);
-             std::cout << "ak, mp5, m249, semi, m39" << endl;
+             std::cout << "ak, mp5, m249, semi, m39, lr" << std::endl;
               break;
 
          case 1:
              SetConsoleTextAttribute(hConsole, 10);
              std::cout << "ak, ";
              SetConsoleTextAttribute(hConsole, 12);
-             std::cout << "mp5, m249, semi, m39" << endl;
+             std::cout << "mp5, m249, semi, m39, lr" << std::endl;
               break;
 
          case 2:
@@ -147,7 +153,7 @@ void print(boolean holo, boolean scope8x,int choice, bool suppresor) {
              SetConsoleTextAttribute(hConsole, 10);
              std::cout << "mp5, ";
              SetConsoleTextAttribute(hConsole, 12);
-             std::cout << "m249, semi, m39" << endl;
+             std::cout << "m249, semi, m39, lr" << std::endl;
               break;
 
          case 3:
@@ -156,7 +162,7 @@ void print(boolean holo, boolean scope8x,int choice, bool suppresor) {
              SetConsoleTextAttribute(hConsole, 10);
              std::cout << "m249, ";
              SetConsoleTextAttribute(hConsole, 12);
-             std::cout << "semi, m39" << endl;
+             std::cout << "semi, m39, lr" << std::endl;
               break;
 
          case 4:
@@ -165,18 +171,27 @@ void print(boolean holo, boolean scope8x,int choice, bool suppresor) {
              SetConsoleTextAttribute(hConsole, 10);
              std::cout << "semi, ";
              SetConsoleTextAttribute(hConsole, 12);
-             std::cout << "m39" << endl;
+             std::cout << "m39, lr" << std::endl;
               break;
          case 5:
              SetConsoleTextAttribute(hConsole, 12);
              std::cout << "ak, mp5, m249, semi, ";
              SetConsoleTextAttribute(hConsole, 10);
-             std::cout << "m39" << endl;
+             std::cout << "m39, ";
+             SetConsoleTextAttribute(hConsole, 12);
+             std::cout << "lr" << std::endl;
+             break;
+         case 6:
+             SetConsoleTextAttribute(hConsole, 12);
+             std::cout << "ak, mp5, m249, semi, m39, ";
+             SetConsoleTextAttribute(hConsole, 10);
+             std::cout << "lr" << std::endl;
+
              break;
     }
 
     SetConsoleTextAttribute(hConsole, 11);
-    std::cout << endl;
+    std::cout << std::endl;
     std::cout << "Attachments: " << "                    ";
     
 
@@ -206,11 +221,11 @@ void print(boolean holo, boolean scope8x,int choice, bool suppresor) {
     }
     if (suppresor) {
         SetConsoleTextAttribute(hConsole, 10);
-        std::cout << "suppresor " << endl;
+        std::cout << "suppresor " << std::endl;
     }
     else if (!suppresor) {
         SetConsoleTextAttribute(hConsole, 12);
-        std::cout << "suppresor " << endl;
+        std::cout << "suppresor " << std::endl;
     }
 }
 
@@ -303,6 +318,24 @@ int main()
             }
             else {
                 choice = 5;
+                Beep(800, 100);
+                system("CLS");
+                print(holo, scope8x, choice, suppresor);
+                Sleep(500);
+
+            }
+        }
+        if (GetAsyncKeyState(VK_DELETE) & 0x8000) {
+
+            if (choice == 6) {
+                choice = 0;
+                Beep(1000, 100);
+                system("CLS");
+                print(holo, scope8x, choice, suppresor);
+                Sleep(500);
+            }
+            else {
+                choice = 6;
                 Beep(800, 100);
                 system("CLS");
                 print(holo, scope8x, choice, suppresor);
@@ -413,10 +446,18 @@ int main()
                 }
             }
             break;
+        case 6:
+            //lr
+            while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
+
+                  if (magsize < 31) {
+                      Smoothing(100.f,LRControl::control_lr[magsize], LR::data[magsize], holo, scope8x, suppresor);
+                      magsize++;
+                  }
+            }
+            break;
         }
-
     }
-
 }
 
 

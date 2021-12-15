@@ -451,7 +451,7 @@ int main()
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
 
                   if (magsize < 31) {
-                      Smoothing(100.f,LRControl::control_lr[magsize], LR::data[magsize], holo, scope8x, suppresor);
+                      Smoothing(120.f, LRControl::control_lr[magsize], LR::data[magsize], holo, scope8x, suppresor);
                       magsize++;
                   }
             }

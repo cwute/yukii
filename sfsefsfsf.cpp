@@ -6,6 +6,7 @@
 #include <cmath>
 #include <Lmcons.h>
 #include <ctime>
+#include "Stuff.hpp"
 
 //line 107 fix
 #pragma warning(disable : 4996)
@@ -37,47 +38,39 @@ void QuerySleep(int ms)
 
 void Mouse_Move(Vector2 vals)
 {
-    // c-style casts lolol
     mouse_event(MOUSEEVENTF_MOVE, (int)vals.x, (int)vals.y, 0, 0);
 }
 
 void Smoothing(float delay, float animation, Vector2 in,bool holo,bool scope8x,bool suppresor, int magsize) {
-    bool debug = true;
+    bool debug = false;
     int x_ = 0, y_ = 0, t_ = 0;
     int xmult, ymult;
-    if (holo && !suppresor) {
-         xmult = (int)(in.x * 1.2 / 4) / sens / 1;
-         ymult = (int)(in.y  * 1.2/ 4) / sens / 1;
+
+    
+    
+
+    xmult = in.x;
+    ymult = in.y;
+
+    if (holo) {
+        xmult = xmult * 1.2f;
+        ymult = ymult * 1.2f;
     }
-    else if (scope8x && !suppresor) {
-        xmult = (int)(in.x * 3.84 / 4) / sens / 1;
-        ymult = (int)(in.y * 3.84 / 4) / sens / 1;
+    if (suppresor) {
+        xmult = xmult * 0.8f;
+        ymult = ymult * 0.8f;
     }
-    else if (suppresor && !holo && !scope8x) {
-        xmult = (int)(in.x * 0.8 / 4) / sens / 1;
-        ymult = (int)(in.y * 0.8 / 4) / sens / 1;
+    if (scope8x) {
+        xmult = xmult * 3.84f;
+        ymult = ymult * 3.84f;
     }
-    else if (suppresor && holo) {
-        xmult = (int)(in.x * 1.2 * 0.8 / 4) / sens / 1;
-        ymult = (int)(in.y * 1.2 * 0.8 / 4) / sens / 1;
-    }
-    else if (suppresor && scope8x) {
-        xmult = (int)(in.x * 3.84 * 0.8 / 4) / sens / 1;
-        ymult = (int)(in.y * 3.84 * 0.8 / 4) / sens / 1;
-    }
-    else if(!holo && !scope8x && !suppresor) {
-        xmult = (int)(in.x / 4) / sens / 1;
-        ymult = (int)(in.y / 4) / sens / 1;
-    }
-    if (randomize) {
-        xmult = xmult + rand() % 2 / 2;
-        ymult = ymult + rand() % 2 / 2;
-    }
+
     if (debug) {
         std::cout << "Current bullet: " << magsize << std::endl;
         std::cout << "Current Vector2: x: " << in.x << " y: " << in.y << std::endl;
         std::cout << "Calculated Vector2: x:" << xmult << " y: " << ymult << std::endl;
     }
+
     for (int i = 1; i <= (int)animation; ++i) {
         int xI = i * xmult / (int)animation;
         int yI = i * ymult / (int)animation;
@@ -477,8 +470,13 @@ int main()
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
 
                 if (magsize < 31) {
-                    Smoothing(133.f, AssaultRifleControl::control_ak[magsize], AssaultRifle::data[magsize],holo,scope8x,suppresor,magsize);
-                    magsize++;
+                    if (magsize >= 1) {
+                        Smoothing(133.f, AssaultRifleControl::control_ak[magsize], Stuff::getPos(AssaultRifle::data[magsize],AssaultRifle::data[magsize - 1]), holo, scope8x, suppresor, magsize);
+                    }
+                    else {
+                        Smoothing(133.f, AssaultRifleControl::control_ak[magsize], Stuff::getPos(AssaultRifle::data[magsize], Vector2(0,0)), holo, scope8x, suppresor, magsize);
+                    }
+                        magsize++;
                 }
             }
             break;
@@ -486,7 +484,12 @@ int main()
             //mp5
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
                 if (magsize < 31) {
-                    Smoothing(100.f, MP5Control::control_mp5[magsize], MP5::data[magsize], holo,scope8x,suppresor, magsize);
+                    if (magsize >= 1) {
+                        Smoothing(100.f, MP5Control::control_mp5[magsize], Stuff::getPos(MP5::data[magsize], MP5::data[magsize - 1]), holo, scope8x, suppresor, magsize);
+                    }
+                    else {
+                        Smoothing(100.f, MP5Control::control_mp5[magsize], Stuff::getPos(MP5::data[magsize], Vector2(0, 0)), holo, scope8x, suppresor, magsize);
+                    }
                     magsize++;
                 }
             }
@@ -495,7 +498,12 @@ int main()
             //m249
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
                 if (magsize < 100) {
-                    Smoothing(110.f, 110.f, M249::data[magsize], holo,scope8x,suppresor, magsize);
+                    if (magsize >= 1) {
+                        Smoothing(103.f, 103.F, Stuff::getPos(M249::data[magsize], M249::data[magsize - 1]), holo, scope8x, suppresor, magsize);
+                    }
+                    else {
+                        Smoothing(103.f, 103.F, Stuff::getPos(M249::data[magsize], Vector2(0, 0)), holo, scope8x, suppresor, magsize);
+                    }
                     magsize++;
                 }
             }
@@ -503,8 +511,13 @@ int main()
         case 4:
             //semi
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
-                if (magsize < 100) {
-                    Smoothing(103.f, 103.f, semi::data[0], holo, scope8x,suppresor, magsize);
+                if (magsize < 17) {
+                    if (magsize >= 1) {
+                        Smoothing(150.f, 150.F, Stuff::getPos(semi::data[magsize], semi::data[magsize - 1]), holo, scope8x, suppresor, magsize);
+                    }
+                    else {
+                        Smoothing(150.f, 150.F, Stuff::getPos(semi::data[magsize], Vector2(0, 0)), holo, scope8x, suppresor, magsize);
+                    }
                     magsize++;
                 }
             }
@@ -512,8 +525,13 @@ int main()
         case 5:
             //m39
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
-                if (magsize < 100) {
-                    Smoothing(205.f, 205.f, M39::data[0], holo, scope8x, suppresor, magsize);
+                if (magsize < 21) {
+                    if (magsize >= 1) {
+                        Smoothing(205.f, 205.f, Stuff::getPos(M39::data[magsize], M39::data[magsize - 1]), holo, scope8x, suppresor, magsize);
+                    }
+                    else {
+                        Smoothing(205.f, 205.f, Stuff::getPos(M39::data[magsize], Vector2(0, 0)), holo, scope8x, suppresor, magsize);
+                    }
                     magsize++;
                 }
             }
@@ -521,9 +539,13 @@ int main()
         case 6:
             //lr
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
-
                   if (magsize < 31) {
-                      Smoothing(120.f, LRControl::control_lr[magsize], LR::data[magsize], holo, scope8x, suppresor, magsize);
+                      if (magsize >= 1) {
+                          Smoothing(120.f, LRControl::control_lr[magsize], Stuff::getPos(LR::data[magsize], LR::data[magsize - 1]), holo, scope8x, suppresor, magsize);
+                      }
+                      else {
+                          Smoothing(120.f, LRControl::control_lr[magsize], Stuff::getPos(LR::data[magsize], Vector2(0, 0)), holo, scope8x, suppresor, magsize);
+                      }
                       magsize++;
                   }
             }
@@ -532,7 +554,12 @@ int main()
             //tommy
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
                 if (magsize < 21) {
-                    Smoothing(129.f, tommyControl::control_tommy[magsize], tommy::data[magsize],holo,scope8x,suppresor, magsize);
+                    if (magsize >= 1) {
+                        Smoothing(129.f, tommyControl::control_tommy[magsize], Stuff::getPos(tommy::data[magsize], tommy::data[magsize -1]), holo, scope8x, suppresor, magsize);
+                    }
+                    else {
+                        Smoothing(129.f, tommyControl::control_tommy[magsize], Stuff::getPos(tommy::data[magsize], Vector2(0, 0)), holo, scope8x, suppresor, magsize);
+                    }
                     magsize++;
                     }
             }
@@ -540,8 +567,13 @@ int main()
         case 8:
             //custom
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
-                if (magsize < 21) {
-                    Smoothing(100.f, customControl::control_custom[magsize], custom::data[magsize], holo, scope8x, suppresor, magsize);
+                if (magsize < 25) {
+                    if (magsize >= 1) {
+                        Smoothing(100.f, customControl::control_custom[magsize], Stuff::getPos(custom::data[magsize], custom::data[magsize - 1]), holo, scope8x, suppresor, magsize);
+                    }
+                    else {
+                        Smoothing(100.f, customControl::control_custom[magsize], Stuff::getPos(custom::data[magsize], Vector2(0, 0)), holo, scope8x, suppresor, magsize);
+                    }
                     magsize++;
                 }
             }

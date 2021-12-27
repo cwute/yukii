@@ -29,5 +29,8 @@
     <ClInclude Include="Recoil Data.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Stuff.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

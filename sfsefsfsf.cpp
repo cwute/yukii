@@ -14,8 +14,6 @@
 //playsound fix
 #pragma comment(lib, "Winmm.lib")
 
-
-
 //using namespace std;
 float sens = 0.6f;
 boolean randomize = true;
@@ -35,6 +33,7 @@ void QuerySleep(int ms)
         currentTime /= timerResolution;
     }
 }
+
 
 void Mouse_Move(Vector2 vals)
 {

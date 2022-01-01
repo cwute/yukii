@@ -22,5 +22,4 @@ namespace Stuff {
 		return Math::Vector2(px_x, px_y);
 	}
 
-
 }

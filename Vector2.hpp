@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <cmath>
 
+//pasted this class https://www.unknowncheats.me/forum/rust/390615-paste-recoil-script.html
+
 namespace Math
 {
 

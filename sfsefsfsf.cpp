@@ -11,12 +11,8 @@
 //line 107 fix
 #pragma warning(disable : 4996)
 
-//playsound fix
-#pragma comment(lib, "Winmm.lib")
-
 //using namespace std;
-float sens = 0.6f;
-boolean randomize = true;
+float sens = 0.62f;
 void QuerySleep(int ms)
 {
     LONGLONG timerResolution;
@@ -45,9 +41,6 @@ void Smoothing(float delay, float animation, Vector2 in,bool holo,bool scope8x,b
     int x_ = 0, y_ = 0, t_ = 0;
     int xmult, ymult;
 
-    
-    
-
     xmult = in.x;
     ymult = in.y;
 
@@ -64,12 +57,6 @@ void Smoothing(float delay, float animation, Vector2 in,bool holo,bool scope8x,b
         ymult = ymult * 3.84f;
     }
 
-    if (debug) {
-        std::cout << "Current bullet: " << magsize << std::endl;
-        std::cout << "Current Vector2: x: " << in.x << " y: " << in.y << std::endl;
-        std::cout << "Calculated Vector2: x:" << xmult << " y: " << ymult << std::endl;
-    }
-
     for (int i = 1; i <= (int)animation; ++i) {
         int xI = i * xmult / (int)animation;
         int yI = i * ymult / (int)animation;
@@ -79,44 +66,11 @@ void Smoothing(float delay, float animation, Vector2 in,bool holo,bool scope8x,b
         x_ = xI; y_ = yI; t_ = tI;
     }
     QuerySleep((int)delay - (int)animation);
-
-}
-
-void printStart() {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, 13);
-    PlaySound(TEXT("D:\\stuff_for_c++_ playing_sounds_etc\\blackclover.wav"), NULL, SND_ASYNC);
-
-
-    std::cout << R"(  ___    ___ ___  ___  ___  __    ___  ___     
- |\  \  /  /|\  \|\  \|\  \|\  \ |\  \|\  \    
- \ \  \/  / | \  \\\  \ \  \/  /|\ \  \ \  \   
-  \ \    / / \ \  \\\  \ \   ___  \ \  \ \  \  
-   \/  /  /   \ \  \\\  \ \  \\ \  \ \  \ \  \ 
- __/  / /      \ \_______\ \__\\ \__\ \__\ \__\
-|\___/ /        \|_______|\|__| \|__|\|__|\|__|
-\|___|/                                        
-                                               
-                                               )" << '\n';
-   
-
-    char* user = getenv("username");
-    std::cout << "Welcome: " << std::string(user) << " uwu " <<std::endl;
-   
-    
-
-    time_t now = time(0);
-    char* dt = ctime(&now);
-    std::cout << "Time of login: " << dt << std::endl;
-    std::cout << std::endl;
-    std::cout << "Currently playing: Black Catcher by Viceblanka" << std::endl;
-
 }
 
 void print(boolean holo, boolean scope8x,int choice, bool suppresor) {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hConsole, 13);
-
     
     std::cout << R"(  ___    ___ ___  ___  ___  __    ___  ___     
  |\  \  /  /|\  \|\  \|\  \|\  \ |\  \|\  \    
@@ -173,7 +127,7 @@ void print(boolean holo, boolean scope8x,int choice, bool suppresor) {
 
          case 3:
              SetConsoleTextAttribute(hConsole, 12);
-             std::cout << "ak, mp5, ";
+             std::cout << "none, ak, mp5, ";
              SetConsoleTextAttribute(hConsole, 10);
              std::cout << "m249, ";
              SetConsoleTextAttribute(hConsole, 12);
@@ -188,6 +142,7 @@ void print(boolean holo, boolean scope8x,int choice, bool suppresor) {
              SetConsoleTextAttribute(hConsole, 12);
              std::cout << "m39, lr, tommy, custom" << std::endl;
               break;
+
          case 5:
              SetConsoleTextAttribute(hConsole, 12);
              std::cout << "none, ak, mp5, m249, semi, ";
@@ -196,6 +151,7 @@ void print(boolean holo, boolean scope8x,int choice, bool suppresor) {
              SetConsoleTextAttribute(hConsole, 12);
              std::cout << "lr, tommy, custom" << std::endl;
              break;
+
          case 6:
              SetConsoleTextAttribute(hConsole, 12);
              std::cout << "none, ak, mp5, m249, semi, m39, ";
@@ -212,6 +168,7 @@ void print(boolean holo, boolean scope8x,int choice, bool suppresor) {
              SetConsoleTextAttribute(hConsole, 12);
              std::cout << " custom " << std::endl;
              break;
+
          case 8:
              SetConsoleTextAttribute(hConsole, 12);
              std::cout << "none, ak, mp5, m249, semi, m39, lr, tommy, ";
@@ -223,7 +180,6 @@ void print(boolean holo, boolean scope8x,int choice, bool suppresor) {
     SetConsoleTextAttribute(hConsole, 11);
     std::cout << std::endl;
     std::cout << "Attachments: " << "                    ";
-    
 
     if (!holo && !suppresor && !scope8x) {
         SetConsoleTextAttribute(hConsole, 10);
@@ -259,16 +215,20 @@ void print(boolean holo, boolean scope8x,int choice, bool suppresor) {
     }
 }
 
+
+void showHideApp() {
+    
+}
+
 int main()
 {
     SetConsoleTitle(L"Yukii");
-    printStart();
+    print(false,false,0,false);
 
     int choice = 0;
     boolean holo = false;
     boolean scope8x = false;
     boolean suppresor = false;
-    boolean debug = true;
 
     while (true) {
         int magsize = 0;
@@ -352,7 +312,6 @@ int main()
                 system("CLS");
                 print(holo, scope8x, choice, suppresor);
                 Sleep(500);
-
             }
         }
         if (GetAsyncKeyState(VK_DELETE) & 0x8000 && !(GetAsyncKeyState(VK_MENU) & 0x8000)) {
@@ -425,6 +384,24 @@ int main()
                 Sleep(500);
             }
         }
+
+        //TODO FIX showing of the console
+        bool hidden = false;
+        if (GetAsyncKeyState(VK_F12) & 0x8000) {
+            if (hidden) {
+                hidden = false;
+                ShowWindow(GetConsoleWindow(), SW_SHOWDEFAULT); //SW_RESTORE to bring back
+                Beep(1000, 100);
+                Sleep(500);
+            }
+            else {
+                hidden = true;
+                ShowWindow(GetConsoleWindow(), SW_HIDE); //SW_RESTORE to bring back
+                Beep(800, 100);
+                Sleep(500);
+            }
+
+        }
         if(GetAsyncKeyState(VK_MENU) & 0x8000 && GetAsyncKeyState(VK_DELETE)){
             if (choice == 7) {
                 choice = 0;
@@ -459,7 +436,6 @@ int main()
 
             }
         }
-        if (GetAsyncKeyState(VK_F12) & 0x8000) exit(0);
 
         switch (choice) {
         case 0:
@@ -576,7 +552,6 @@ int main()
                     magsize++;
                 }
             }
-
             break;
         }
     

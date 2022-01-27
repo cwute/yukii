@@ -1,5 +1,8 @@
 #include "Vector2.hpp"
 
+//same as hpp i pasted this too https://www.unknowncheats.me/forum/rust/390615-paste-recoil-script.html
+
+
 namespace Math
 {
 	Vector2::Vector2()

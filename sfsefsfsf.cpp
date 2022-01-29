@@ -385,23 +385,6 @@ int main()
             }
         }
 
-        //TODO FIX showing of the console
-        bool hidden = false;
-        if (GetAsyncKeyState(VK_F12) & 0x8000) {
-            if (hidden) {
-                hidden = false;
-                ShowWindow(GetConsoleWindow(), SW_SHOWDEFAULT); //SW_RESTORE to bring back
-                Beep(1000, 100);
-                Sleep(500);
-            }
-            else {
-                hidden = true;
-                ShowWindow(GetConsoleWindow(), SW_HIDE); //SW_RESTORE to bring back
-                Beep(800, 100);
-                Sleep(500);
-            }
-
-        }
         if(GetAsyncKeyState(VK_MENU) & 0x8000 && GetAsyncKeyState(VK_DELETE)){
             if (choice == 7) {
                 choice = 0;

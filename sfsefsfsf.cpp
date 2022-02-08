@@ -427,7 +427,7 @@ int main()
             //ak
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
 
-                if (magsize < 31) {
+               if (magsize < 30) {
                     if (magsize >= 1) {
                         Smoothing(133.f, AssaultRifleControl::control_ak[magsize], Stuff::getPos(AssaultRifle::data[magsize],AssaultRifle::data[magsize - 1]), holo, scope8x, suppresor, magsize);
                     }
@@ -435,13 +435,13 @@ int main()
                         Smoothing(133.f, AssaultRifleControl::control_ak[magsize], Stuff::getPos(AssaultRifle::data[magsize], Vector2(0,0)), holo, scope8x, suppresor, magsize);
                     }
                         magsize++;
-                }
+               }
             }
             break;
         case 2:
             //mp5
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
-                if (magsize < 31) {
+                if (magsize < 30) {
                     if (magsize >= 1) {
                         Smoothing(100.f, MP5Control::control_mp5[magsize], Stuff::getPos(MP5::data[magsize], MP5::data[magsize - 1]), holo, scope8x, suppresor, magsize);
                     }
@@ -455,7 +455,7 @@ int main()
         case 3:
             //m249
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
-                if (magsize < 100) {
+               
                     if (magsize >= 1) {
                         Smoothing(103.f, 103.F, Stuff::getPos(M249::data[magsize], M249::data[magsize - 1]), holo, scope8x, suppresor, magsize);
                     }
@@ -463,13 +463,13 @@ int main()
                         Smoothing(103.f, 103.F, Stuff::getPos(M249::data[magsize], Vector2(0, 0)), holo, scope8x, suppresor, magsize);
                     }
                     magsize++;
-                }
+                
             }
             break;
         case 4:
             //semi
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
-                if (magsize < 17) {
+                if (magsize < 16) {
                     if (magsize >= 1) {
                         Smoothing(150.f, 150.F, Stuff::getPos(semi::data[magsize], semi::data[magsize - 1]), holo, scope8x, suppresor, magsize);
                     }
@@ -483,7 +483,7 @@ int main()
         case 5:
             //m39
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
-                if (magsize < 21) {
+                if (magsize < 20) {
                     if (magsize >= 1) {
                         Smoothing(205.f, 205.f, Stuff::getPos(M39::data[magsize], M39::data[magsize - 1]), holo, scope8x, suppresor, magsize);
                     }
@@ -497,7 +497,7 @@ int main()
         case 6:
             //lr
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
-                  if (magsize < 31) {
+                if (magsize < 30) {
                       if (magsize >= 1) {
                           Smoothing(120.f, LRControl::control_lr[magsize], Stuff::getPos(LR::data[magsize], LR::data[magsize - 1]), holo, scope8x, suppresor, magsize);
                       }
@@ -511,7 +511,7 @@ int main()
         case 7:
             //tommy
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
-                if (magsize < 21) {
+                if (magsize < 20) {
                     if (magsize >= 1) {
                         Smoothing(129.f, tommyControl::control_tommy[magsize], Stuff::getPos(tommy::data[magsize], tommy::data[magsize -1]), holo, scope8x, suppresor, magsize);
                     }
@@ -525,7 +525,7 @@ int main()
         case 8:
             //custom
             while (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
-                if (magsize < 25) {
+                if (magsize < 24) {
                     if (magsize >= 1) {
                         Smoothing(100.f, customControl::control_custom[magsize], Stuff::getPos(custom::data[magsize], custom::data[magsize - 1]), holo, scope8x, suppresor, magsize);
                     }

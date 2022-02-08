@@ -4,7 +4,6 @@
 
 namespace Stuff {
 
-
 	Math::Vector2 getPos(Math::Vector2 in, Math::Vector2 last_shot) {
 
 		//cur shot - last shot
